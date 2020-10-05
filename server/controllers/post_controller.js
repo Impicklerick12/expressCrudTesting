@@ -1,4 +1,4 @@
-const { getAllPosts, getPostById, addPost } = require('../util/utilities');
+const { getAllPosts, getPostById, addPost, updatePost } = require('../util/utilities');
 
 const getPosts = (request, response) => {
 
@@ -27,7 +27,20 @@ const makePost = (request, response) => {
     }
 }
 
+const changePost = function(request, response) {
+	let post = updatePost(request)
+	if (post) {
+		response.status(200)
+		response.send(post)
+	} else {
+		response.status(500)
+		response.send(request.error)
+	}
+}
+
 module.exports = {
     getPosts,
-    getPost
+    getPost,
+    makePost,
+    changePost
 }

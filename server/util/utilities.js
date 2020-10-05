@@ -1,12 +1,12 @@
-const dataFile = '../data/blog_posts.json';
+const dataFile = '../../server/data/blog_posts.json';
 let blogPosts = require(dataFile);
 const fs = require('fs');
 
-const getAllPosts = (request, response) => {
+const getAllPosts = (request) => {
     return blogPosts
 }
 
-const getPostById = (request, response) => {
+const getPostById = (request) => {
     let post = blogPosts[request.params.id]
     if (post) return post
     else {
@@ -14,7 +14,7 @@ const getPostById = (request, response) => {
     }
 }
 
-const addPost = (request, response) => {
+const addPost = (request) => {
     try {
         const date = Date.now()
         let blogPost = {
@@ -30,17 +30,37 @@ const addPost = (request, response) => {
         fs.writeFileSync(getDataFileRelativeToApp(dataFile), JSON.stringify(blogPosts))
         return blogPost
     } catch {
+        let error = request.error
         console.log(error)
-        request.error = error
         return null
     }
 }
+
 function getNextId() {
     let sortedIds = Object.keys(blogPosts).sort()
     nextId = (sortedIds.length != 0)
         ? parseInt(sortedIds[sortedIds.length - 1]) + 1
         : 1
     return nextId
+}
+
+// Update post core functionality that needs to be tested
+const updatePost = (request) => {
+    try {
+		let id = request.params.id
+		if (!blogPosts[id]) throw "Post not found"
+		blogPosts[id].title = request.body.title
+		blogPosts[id].content = request.body.content
+		blogPosts[id].category = request.body.category 
+				? request.body.category 
+				: blogPosts[id].category
+		blogPosts[id].modified_date = Date.now()
+		fs.writeFileSync(getDataFileRelativeToApp(dataFile), JSON.stringify(blogPosts))
+		return blogPosts[id]
+	} catch (error) {
+		request.error = error
+		return null
+	}
 }
 
 // Functions for test purpose only, to load data and write to the file
@@ -65,5 +85,6 @@ module.exports = {
     loadData,
     getDataFileRelativeToApp,
     getPostById,
-    addPost
+    addPost,
+    updatePost
 }

@@ -3,6 +3,12 @@ const app = express();
 const port = 3000;
 const postRouter = require('./routes/post_routes');
 
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(express.json())
+
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })

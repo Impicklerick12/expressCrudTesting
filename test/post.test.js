@@ -1,7 +1,7 @@
 const expect = require('expect');
 
 // Testing unit function (defined in utilities.js)
-const { getAllPosts, loadData, getDataFileRelativeToApp, getPostById, addPost } = require('../server/util/utilities');
+const { getAllPosts, loadData, getDataFileRelativeToApp, getPostById, addPost, updatePost } = require('../server/util/utilities');
 
 const fs = require('fs');
 
@@ -35,8 +35,40 @@ describe('get post by id', () => {
     })
 })
 
-describe('test for add post' () => {
-    
+describe("addPost", () => { 
+    test("should add a post", () => { 
+        // define a req object with expected structure 
+        const request = { 
+            body: { 
+                title: "Another post", 
+                username: "tester", 
+                content: "This is another blog post!", 
+                category: "" 
+            } 
+        } 
+        let post = addPost(request)
+        expect(post.title).toBe(request.body.title) 
+    })
+})
+
+// updatePost
+describe("updatePost", () => {
+	it("should update a post", () => {
+		// set up a req object
+		const request = {
+			params: {
+				id: "1"
+			},
+			body: {
+				title: "Updated post",
+				username: "tester",
+				content: "This is an updated blog post!",
+				category: ""
+			}
+		}
+		let post = updatePost(request)
+		expect(post.title).toBe(request.body.title)
+	})
 })
 
 function setUpData() {
@@ -54,3 +86,4 @@ function setUpData() {
 }
 
 // Testing unit functions defined in utilities.js
+

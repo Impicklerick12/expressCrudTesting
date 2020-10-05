@@ -1,3 +1,9 @@
 {
-    
+    "1": {
+        "title": "Updated post",
+        "username": "Luke",
+        "create_date": 1601874930073,
+        "modified_date": 1601874930073,
+        "content": "This is an updated blog post!"
+    }
 }
